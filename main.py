@@ -42,7 +42,8 @@ def webhook():
         return jsonify({
             'status': 'success', 
             'message': 'Webhook received and saved',
-            'filename': data['body']
+            'filename': data.body
+            
         }), 200
 
 if __name__ == "__main__":
