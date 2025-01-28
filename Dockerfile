@@ -7,17 +7,20 @@ WORKDIR /app
 # Install system dependencies (including FFmpeg)
 RUN apt-get update && apt-get install -y ffmpeg
 
-# Copy the project files into the container
-COPY . .
+# Copy requirements first to leverage Docker cache
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the correct port
-EXPOSE 8000
+# Copy the rest of the application
+COPY . .
 
-# Run the app with Uvicorn inside Gunicorn (for async support)
-# ... rest of the Dockerfile remains the same ...
+# Create directory for files
+RUN mkdir -p files
 
-# Change the CMD line to use gunicorn directly without uvicorn worker
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "src.app:create_app()"]
+# Expose port 5000 (matches the port in main.py)
+EXPOSE 5000
+
+# Run the Flask app using Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]

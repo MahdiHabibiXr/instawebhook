@@ -1,13 +1,15 @@
 from flask import Flask, request, jsonify
 import asyncio
 from shazam import get_song_info
+import json
+import glob
+from datetime import datetime
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
     # Get list of webhook data files
-    import glob
     files = sorted(glob.glob('webhook_data_*.txt'))
     
     if not files:
@@ -29,9 +31,6 @@ def webhook():
         print('Received webhook data:', data)
         
         # Save webhook data to a text file
-        import json
-        from datetime import datetime
-        
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         filename = f'webhook_data_{timestamp}.txt'
         
