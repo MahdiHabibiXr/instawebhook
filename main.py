@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Hello, Hamravesh!"
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     if request.method == 'POST':
@@ -17,6 +21,5 @@ def webhook():
         # Return a success response
         return jsonify({'status': 'success', 'message': 'Webhook received'}), 200
 
-if __name__ == '__main__':
-    # Run the Flask app on port 5000
-    app.run(debug=True, port=5000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=False)

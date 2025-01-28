@@ -1,20 +1,17 @@
-# Use an official lightweight Python image
-FROM python:3.10-slim
+# Use an official Python runtime
+FROM python:3.10
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the requirements file
-COPY requirements.txt .
+# Copy the project files into the container
+COPY . .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
-COPY . .
+# Expose the correct port (Hamravesh expects 8000)
+EXPOSE 8000
 
-# Expose the port Flask runs on
-EXPOSE 5000
-
-# Run the application
-CMD ["python", "main.py"]
+# Run the app with Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8000", "main:app"]
