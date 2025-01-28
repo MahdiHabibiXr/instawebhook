@@ -35,11 +35,9 @@ def webhook():
         filename = f'webhook_data_{timestamp}.txt'
         
         with open(filename, 'w') as f:
-            # Write each top-level item separately
-            for key, value in data.items():
-                f.write(f"{key}:\n")
-                f.write(json.dumps(value, indent=2))
-                f.write('\n======\n')
+            # Write only the body data
+            if 'body' in data:
+                f.write(json.dumps(data['body'], indent=2))
             
         # Return a success response
         return jsonify({
