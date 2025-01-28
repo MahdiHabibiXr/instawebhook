@@ -40,6 +40,8 @@ def webhook():
             if 'body' in data and 'payload' in data['body']:
                 payload = data['body']['payload']
                 account = payload.get('account', {})
+                social = payload.get('socialUser', {})
+
                 # Extract payload fields
                 payload_id = payload.get('id')
                 message_id = payload.get('message_id')
@@ -55,6 +57,8 @@ def webhook():
                 reactions = payload.get('reactions')
                 account_id = payload.get('account_id')
                 conversation_id = payload.get('conversation_id')
+
+                social_username = social.get('username')
 
                 # Extract account fields
                 acc_id = account.get('id')
@@ -104,7 +108,7 @@ def webhook():
                 f.write(f"Account Social User ID: {acc_social_user_id}\n")
 
             if(attachment):
-                if(profile_url != 'https://instagram.com/aibeat'):
+                if(social_username != 'aibeat'):
                     send_message(conversation_id, attachment)
                 
         # Return a success response
