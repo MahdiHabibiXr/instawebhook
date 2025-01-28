@@ -23,11 +23,7 @@ def home():
 def webhook():
     if request.method == 'POST':
         # Get the JSON data from the webhook
-        data = request.json  # Get the raw JSON data
-        
-        # Handle both single object and list formats
-        if isinstance(data, list):
-            data = data[0]  # Get first item if it's a list
+        data = request.json[0]  # Get first item since webhook data is in a list
         
         # Extract the required fields
         webhook_type = data.get('type')
