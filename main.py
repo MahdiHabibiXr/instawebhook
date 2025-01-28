@@ -35,15 +35,14 @@ def webhook():
         filename = f'webhook_data_{timestamp}.txt'
         
         with open(filename, 'w') as f:
-            data['body']
-            json.dump(data, f, indent=2)
+            f.write(data)
             
         # Return a success response
         return jsonify({
             'status': 'success', 
             'message': 'Webhook received and saved',
-            'filename': data.body
-            
+            'filename': filename,
+            'data': data
         }), 200
 
 if __name__ == "__main__":
