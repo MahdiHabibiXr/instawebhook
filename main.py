@@ -4,6 +4,7 @@ from shazam import get_song_info
 import json
 import glob
 from datetime import datetime
+from instagram import send_message
 
 app = Flask(__name__)
 
@@ -102,7 +103,10 @@ def webhook():
                 f.write(f"Automation Status: {automation_status}\n")
                 f.write(f"Account Social User ID: {acc_social_user_id}\n")
 
-            
+            if(attachment):
+                if(profile_url != 'https://instagram.com/aibeat'):
+                    send_message(conversation_id, attachment)
+                
         # Return a success response
         return jsonify({
             'status': 'success',
