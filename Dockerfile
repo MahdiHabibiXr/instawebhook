@@ -17,4 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # Run the app with Uvicorn inside Gunicorn (for async support)
-CMD ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000", "main:app"]
+# ... rest of the Dockerfile remains the same ...
+
+# Change the CMD line to use gunicorn directly without uvicorn worker
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--workers", "4", "src.app:create_app()"]
