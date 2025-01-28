@@ -35,6 +35,7 @@ def webhook():
         filename = f'webhook_data_{timestamp}.txt'
         
         with open(filename, 'w') as f:
+            data['body']
             json.dump(data, f, indent=2)
             
         # Return a success response
