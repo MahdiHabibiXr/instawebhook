@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+import asyncio
+from shazam import get_song_info
 
 app = Flask(__name__)
 
@@ -21,26 +23,43 @@ def home():
 def webhook():
     if request.method == 'POST':
         # Get the JSON data from the webhook
-        data = request.json
+        data = request.json[0]  # Get first item since webhook data is in a list
         
-        # Print the received data
-        print('Received webhook data:', data)
+        # Extract the required fields
+        webhook_type = data.get('type')
+        user_id = data.get('user_id') 
+        payload = data.get('payload')
+        social_user = data.get('body', {}).get('socialUser')
         
-        # Save webhook data to a text file
+        # Print the extracted data
+        print('Webhook type:', webhook_type)
+        print('User ID:', user_id)
+        print('Payload:', payload)
+        print('Social User:', social_user)
+        
+        # Save extracted data to a text file
         import json
         from datetime import datetime
         
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         filename = f'webhook_data_{timestamp}.txt'
         
+        extracted_data = {
+            'type': webhook_type,
+            'user_id': user_id,
+            'payload': payload,
+            'socialUser': social_user
+        }
+        
         with open(filename, 'w') as f:
-            json.dump(data, f, indent=2)
+            json.dump(extracted_data, f, indent=2)
             
-        # Return a success response
+        # Return a success response with extracted data
         return jsonify({
-            'status': 'success', 
-            'message': 'Webhook received and saved',
-            'filename': filename
+            'status': 'success',
+            'message': 'Webhook data extracted and saved',
+            'filename': filename,
+            'extracted_data': extracted_data
         }), 200
 
 if __name__ == "__main__":
